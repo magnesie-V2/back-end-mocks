@@ -23,10 +23,11 @@ casual.register_provider({
             image_url: `https://www.example.org/pyl-bank/${fId}.pyl`
         }
     },
-    photogrammetry_job: (nbPhotos) => {
+    photogrammetry_job: (nbPhotos, greenEnergy) => {
         return {
             id: casual.uuid,
             nb_photos: nbPhotos || 0,
+            green_energy: greenEnergy || casual.integer(0, 100),
             status: 'InProgress'
         }
     }
@@ -48,16 +49,17 @@ server.get('/jobs', (_, response) => {
 server.post('/job', (request, response) => {
     console.log(request.body)
     let photos = request.body['photos']
+    let greenEnergy = request.body['greenEnergyPercentage']
     if (Array.isArray(photos) && photos.length > 0) {
-        response.status(200).jsonp({ id: start_job(photos) })
+        response.status(200).jsonp({ id: start_job(photos, greenEnergy) })
     } else {
         response.status(400).jsonp()
     }
 })
 
 
-const start_job = (photos) => {
-    let job = casual.photogrammetry_job(photos.length)
+const start_job = (photos, greenEnergy) => {
+    let job = casual.photogrammetry_job(photos.length, greenEnergy)
     jobs.push(job);
 
     const job_duration = photos.length * 100
