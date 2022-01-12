@@ -2,9 +2,7 @@
   "name": "back-end-mocks",
   "version": "1.0.0",
   "description": "Mocks of the different microservices to facilitate developments on the front-end",
-  "main": "index.js",
   "scripts": {
-    "start": "node -r esm index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +18,7 @@
   "dependencies": {
     "casual": "^1.6.2",
     "esm": "^3.2.25",
+    "http": "^0.0.1-security",
     "json-server": "^0.17.0"
   }
 }

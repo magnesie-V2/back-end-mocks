@@ -7,5 +7,5 @@ Mocks of the different microservices to facilitate developments on the front-end
 cd back-end-mocks
 npm i
 
-npm run start
+node -r esm <mock>.js 
 ```

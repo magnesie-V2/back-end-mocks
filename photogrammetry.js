@@ -27,8 +27,10 @@ casual.register_provider({
         return {
             id: casual.uuid,
             nb_photos: nbPhotos || 0,
-            green_energy: greenEnergy || casual.integer(0, 100),
-            status: 'InProgress'
+            green_energy: greenEnergy || casual.integer(0, 100), // %
+            status: 'InProgress',
+            current_server_energy_rate: casual.double(5, 25), // Watts
+            logs: casual.text,
         }
     }
 })
@@ -44,6 +46,19 @@ server.get('/modelization/:id', (request, response) => {
 
 server.get('/jobs', (_, response) => {
     response.status(200).jsonp(jobs)
+})
+
+server.get('/job/:id', (req, res) => {
+    let target
+    for (let job of jobs) {
+        if (job.id == req.params["id"]) {
+            target = job
+            break;
+        }
+    }
+    res.status(200).jsonp(
+        target
+    )
 })
 
 server.post('/job', (request, response) => {
@@ -62,7 +77,7 @@ const start_job = (photos, greenEnergy) => {
     let job = casual.photogrammetry_job(photos.length, greenEnergy)
     jobs.push(job);
 
-    const job_duration = photos.length * 100
+    const job_duration = photos.length * 15000
 
     setTimeout(() => {
         for (let i in jobs) {
